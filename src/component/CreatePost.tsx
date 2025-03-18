@@ -1,5 +1,5 @@
 import { Post } from '@/types';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 const createPost = async (newPost: Post) => {
@@ -13,7 +13,16 @@ const createPost = async (newPost: Post) => {
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
-  const { mutate } = useMutation({ mutationFn: createPost });
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: createPost,
+    //invalidate the posts query so that on creation it refetches the data
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
