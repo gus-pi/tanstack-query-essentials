@@ -21,13 +21,19 @@ const CreatePost = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="mx-auto flex items-center">
       <input
         type="text"
         placeholder="Add title..."
         onChange={(e) => setTitle(e.target.value)}
+        className="bg-white m-4"
       />
-      <button type="submit">Submit</button>
+      <button
+        type="submit"
+        className="border rounded-md px-2 bg-gray-700 text-white hover:cursor-pointer hover:bg-gray-400"
+      >
+        Submit
+      </button>
     </form>
   );
 };
