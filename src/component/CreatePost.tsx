@@ -22,6 +22,19 @@ const CreatePost = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] });
     },
+    onMutate: async (newPost: Post) => {
+      await queryClient.cancelQueries({ queryKey: ['posts'] });
+      const previousPosts = queryClient.getQueryData(['posts']);
+      queryClient.setQueryData(['posts'], (old: Post[]) => [
+        ...old,
+        { id: Date.now(), ...newPost },
+      ]);
+
+      return { previousPosts };
+    },
+    onError: (err, newPost, context) => {
+      queryClient.setQueryData(['posts'], context?.previousPosts);
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -10,7 +10,7 @@ const fetchPosts = async () => {
 };
 
 const Posts = () => {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery<Post[]>({
     queryKey: ['posts'],
     queryFn: fetchPosts,
   });
@@ -25,7 +25,7 @@ const Posts = () => {
 
   return (
     <>
-      {data.map((post: Post) => (
+      {data?.map((post: Post) => (
         <p key={post.id}>{post.title}</p>
       ))}
     </>
